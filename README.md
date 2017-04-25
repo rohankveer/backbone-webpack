@@ -1,4 +1,4 @@
-# Backbone with react
+# Backbone with Webpack
 
 ### To see the app in action follow the steps below ###
 
