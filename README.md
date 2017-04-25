@@ -1,4 +1,4 @@
-# incident_management_ui
+# Backbone with react
 
 ### To see the app in action follow the steps below ###
 
