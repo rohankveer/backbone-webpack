@@ -1,0 +1,5 @@
+{
+    "getPlaylists" : "//api.soundcloud.com/playlists/",
+    "getTracks" : "//api.soundcloud.com/tracks/",
+    "getUsers" : "//api.soundcloud.com/users/"
+}

@@ -1,5 +1,6 @@
 var path = require("path");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var webpack = require('webpack');
 module.exports = {
   entry: {
     app: ["./app/main.js"]
@@ -26,6 +27,7 @@ module.exports = {
       ]
   },
   plugins: [
-      new ExtractTextPlugin({ filename: "./public/style.css",allChunks: true })
+      new ExtractTextPlugin({ filename: "./public/style.css",allChunks: true }),
+      new webpack.ProvidePlugin({_: 'underscore'})
     ]
 };

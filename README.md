@@ -4,7 +4,7 @@
 
 1. npm install
 2. npm run start
-3. See the app running on <http://localhost:3000/>
+3. See the app running on <http://localhost:8080/>
 
 ### While deployment use the below command to build the app ###
 
