@@ -9,6 +9,8 @@ var albumDetailView = require("./view/albumDetailView")
 var config = require('./../config.json');
 import '../assets/styles/main.scss';
 import axios from 'axios';
+var vent = {};
+_.extend(vent, Backbone.Events);
 
 // define routes
 var AppRouter = Backbone.Router.extend({
@@ -41,16 +43,16 @@ app_router.on('route:getAlbum', function (albumId) {
 app_router.on('route:defaultRoute', function (actions) {
     // clear previous contents 
     document.getElementById("app").innerHTML = "";
+    // append search box here
+    var searchBox = new searchView({vent:vent});
+    searchBox.render();
+    document.getElementById("app").appendChild(searchBox.el);
     // fetch albums
     axios.get(config.getTracks + "?linked_partitioning=1&client_id=f4323c6f7c0cd73d2d786a2b1cdae80c&limit=50&offset=0&tags=house")
         .then(function (response) {
             var albumsArray = response.data.collection;
             // create a collection for albums
             var albumCollection;
-            // append search box here
-            var searchBox = new searchView();
-            searchBox.render();
-            document.getElementById("app").appendChild(searchBox.el);
             albumsArray.forEach((albumData,index)=>{
                 // create collection for each 4 albums
                 if((index % 3) == 0)
@@ -70,6 +72,39 @@ app_router.on('route:defaultRoute', function (actions) {
         })
         .catch(function (error) {
             console.log(error);
+        });
+        // listening to search event
+        vent.on('search_complete', (searchValue)=>{
+            $('.album-row').remove();
+             axios.get(config.getTracks + "?linked_partitioning=1&client_id=f4323c6f7c0cd73d2d786a2b1cdae80c&limit=50&offset=0&tags=house")
+                .then((response) => {
+                    var albumsArray = response.data.collection;
+                    // filter array
+                    albumsArray = albumsArray.filter((arrayData)=>{
+                        return arrayData.title.includes(searchValue);
+                    });
+                    // create a collection for albums
+                    var albumCollection;
+                    albumsArray.forEach((albumData,index)=>{
+                        // create collection for each 4 albums
+                        if((index % 3) == 0)
+                            albumCollection = new AlbumCollection();
+                        // create model for each album
+                        if(albumData.artwork_url != null){
+                            var album = new Album({ ID: albumData.id, AlbumImage: albumData.artwork_url });
+                            // push into album collection
+                            albumCollection.push(album);
+                        }
+                        if((albumCollection.length % 3) == 0 || (albumCollection.length == albumsArray.length)){
+                            var albumList = new homeView({ model: albumCollection });
+                            albumList.render();
+                            document.getElementById("app").appendChild(albumList.el);
+                        }
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         });
 });
 // Start Backbone history a necessary step for bookmarkable URL's

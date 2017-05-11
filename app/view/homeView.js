@@ -4,7 +4,7 @@ var albumView = require("./albumView");
 var albumListView = Backbone.View.extend({
     model: AlbumsCollection,
     tagName: "div",
-    className: "row",
+    className: "row album-row",
     render: function() {
  
         for(var i = 0; i < this.model.length; ++i) {

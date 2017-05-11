@@ -32,16 +32,12 @@ var Album = Backbone.Model.extend({
         switch (method) {
             case 'read':
                 return 'http://localhost:51377/api/Books/' + this.id;
-                break;
             case 'create':
                 return 'http://localhost:51377/api/Books';
-                break;
             case 'update':
                 return 'http://localhost:51377/api/Books/' + this.id;
-                break;
             case 'delete':
                 return 'http://localhost:51377/api/Books/' + this.id;
-                break;
         }
     },
     // Now lets override the sync function to use our custom URLs
